@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Diony (Discord Personality)</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Diony</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Ilirida
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Subfields:</span> Leadership, Reformation, Patriotism
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> NLA reformationist, Iliridan patriot, and e-pussy annihilator
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Status:</span> <span style="color: #f04747;">Owner</span>
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Franchises:</span> Several Byrektore locations across Ilirida
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Personality:</span> Charismatic, Fierce, Patriotic
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#server-history">Server History</a></li>
+        <li><a href="#owner-career">Owner Career</a>
+            <ol>
+                <li><a href="#nla-reformation">NLA Reformation</a></li>
+                <li><a href="#controversial-actions">Controversial Actions</a></li>
+            </ol>
+        </li>
+        <li><a href="#personal-life">Personal Life</a></li>
+        <li><a href="#freaky-reputation">Freaky Reputation</a></li>
+        <li><a href="#current-status">Current Status</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="introduction">
+    <h2 class="section-title">Introduction <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Diony</strong> is a controversial and patriotic figure in the Iliridan community, widely known for his radical stance as a reformationist within the NLA (National Liberation Army). Diony is often celebrated for his unwavering dedication to the Iliridan cause and his unconventional leadership style that blends fierce nationalism with a strong entrepreneurial spirit.</p>
+    <p>He is also recognized as the owner of several Byrektore franchises across Ilirida, where his influence in both the political and business arenas is undeniable. Diony has garnered significant attention for his involvement in the "burnings of 27 Macedonian villages," an event that has solidified his status as both a hero and a controversial figure.</p>
+</div>
+
+<div class="section" id="server-history">
+    <h2 class="section-title">Server History <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The <strong>Ilirida</strong> community server was founded in 2024 as a gathering space for supporters of Iliridan patriotism and the NLA's cause. Diony quickly emerged as a key figure in the server, known for his unyielding support of Iliridan nationalism and his efforts to expand the influence of Iliridan ideals.</p>
+    <p>His rise to prominence was marked by a series of bold statements and actions that earned him both admiration and criticism. As a prominent figure in the NLA, Diony worked tirelessly to advocate for the reformation of the group’s ideology, ultimately shaping his path to ownership within the server.</p>
+</div>
+
+<div class="section" id="owner-career">
+    <h2 class="section-title">Owner Career <a href="#" class="edit-link">[edit]</a></h2>
+
+    <div id="nla-reformation">
+        <h3>NLA Reformation <a href="#" class="edit-link">[edit]</a></h3>
+        <p>Diony is widely regarded as a key reformationist within the NLA, advocating for a more aggressive approach to Iliridan patriotism. His leadership within the server was bolstered by his strong support for the group’s transformation, emphasizing the need to unify Ilirida under a banner of militant nationalism. His reforms within the NLA resonated with many members, solidifying his position as a leader in the community.</p>
+    </div>
+
+    <div id="controversial-actions">
+        <h3>Controversial Actions <a href="#" class="edit-link">[edit]</a></h3>
+        <p>One of the most notorious events in Diony’s career is his involvement in the "burnings of 27 Macedonian villages," a series of events that further solidified his reputation as a fierce and uncompromising patriot. These actions, while controversial, are seen by his supporters as a bold statement of Iliridan resistance. Diony’s approach to leadership, though divisive, remains a defining part of his legacy.</p>
+        <p>Additionally, Diony is known for his “e-pussy annihilator” persona, which reflects his blunt and unapologetic approach to online discourse and interactions. This facet of his character has earned him a reputation as a fearless, albeit polarizing, figure.</p>
+    </div>
+</div>
+
+<div class="section" id="personal-life">
+    <h2 class="section-title">Personal Life <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Diony maintains a private personal life, though some aspects of it have been revealed through his activities and interactions within the server. Despite his polarizing views, Diony has built a loyal following who admire his passionate pursuit of Iliridan nationalism and his unapologetic stance on various issues. His work in both politics and business has played a significant role in his public persona.</p>
+</div>
+
+<div class="section" id="freaky-reputation">
+    <h2 class="section-title">Freaky Reputation <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Diony is often described as charismatic yet controversial. His unapologetic patriotism and bold actions have earned him a mixed reputation within the community. His extreme views, especially regarding the NLA’s reformation and the Macedonian villages incident, have led to both admiration and disdain.</p>
+    <p>He is also known for his irreverent humor and his “e-pussy annihilator” persona, which has cemented his place as one of the most notorious figures in the Discord community. Diony is often associated with being a staunch defender of Iliridan culture and an advocate for the unfiltered, no-holds-barred approach to online interactions.</p>
+</div>
+
+<div class="section" id="current-status">
+    <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+    <p>As of March 2025, Diony continues to lead the Ilirida community server, maintaining his status as the influential and controversial owner. His leadership remains uncompromising, and his efforts to expand Iliridan influence through both political and entrepreneurial ventures continue to shape his legacy. Despite his polarizing nature, Diony remains a powerful figure in the Discord community, commanding both respect and fear.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Diony’s impact on the Ilirida server is profound. His controversial actions and reformationist ideas have defined the server’s identity and direction. Though his approach is divisive, his legacy is firmly cemented as one of bold action, fierce patriotism, and unapologetic leadership. His role in the NLA’s reformation and his involvement in the burnings of 27 Macedonian villages will be remembered for years to come.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Ilirida Server, "The NLA Reformation," channel discussion, January 2025.</li>
+        <li>TheAlbanians, "Radical Nationalism in Discord Communities," Discord Chronicles, February 2025.</li>
+        <li>Server logs, March 2025, archived in "Owner Transition" channel.</li>
+        <li>Diony’s Announcement Post, "The Future of Ilirida," January 2025.</li>
+        <li>Personal conversation, shared in "General Discussion" channel, March 2025.</li>
+    </ol>
+</div>
+
+    
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
