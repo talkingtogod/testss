@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Von (Discord Personality)</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Von</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Subfields:</span> Vril Edits, Memes, Humor
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> Vril edits, Ukrainian Glaze, Relationship with MIDLEG
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Status:</span> Active Member
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#relationship-with-midleg">Relationship with MIDLEG</a></li>
+        <li><a href="#vril-edits">Vril Edits</a></li>
+        <li><a href="#ukrainian-glaze">Ukrainian Glaze</a></li>
+        <li><a href="#dantes-lover">Dante's Lover</a></li>
+        <li><a href="#current-status">Current Status</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="introduction">
+    <h2 class="section-title">Introduction <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Von</strong> is an eccentric and highly influential member of the <strong>Eternal Shqiperia</strong> server, known for his meme culture contributions, his odd yet iconic relationship with <strong>MIDLEG</strong>, and his unique edits that have left a lasting mark on the community.<span class="footnote">[1]</span> His personality is a blend of dark humor, creativity, and a penchant for strange online phenomena, making him a central figure in the server's social dynamics.</p>
+    <p>Von’s involvement in the server has earned him recognition for his artistic contributions (primarily his Vril edits) and his unorthodox interactions with server members, particularly his relationship with MIDLEG. His humor, though at times unsettling, is celebrated for its originality and ability to provoke thought.</p>
+</div>
+
+<div class="section" id="relationship-with-midleg">
+    <h2 class="section-title">Relationship with MIDLEG <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Von’s relationship with <strong>MIDLEG</strong> is one of the most talked-about dynamics within the Eternal Shqiperia server. The two share an odd, almost telepathic bond when it comes to memes and chaos, often collaborating on bizarre projects and pranks. While MIDLEG is known for his "freaky" reputation, Von complements this with a more refined yet equally chaotic sense of humor.<span class="footnote">[2]</span></p>
+    <p>Their friendship has been integral in shaping the server’s culture, with Von and MIDLEG often co-authoring some of the most talked-about moments in the community. From creating surreal memes to pulling off unpredictable server events, their relationship has fostered an environment of constant change and eccentricity.</p>
+</div>
+
+<div class="section" id="vril-edits">
+    <h2 class="section-title">Vril Edits <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Von is widely known for his <strong>Vril edits</strong>, a unique form of meme editing that combines strange, sometimes eerie, imagery with obscure references and philosophical undertones. These edits often feature heavily distorted photos, bizarre symbols, and a sense of surrealism that gives them a peculiar, almost cult-like allure.<span class="footnote">[3]</span></p>
+    <p>His Vril edits have gained a cult following within Eternal Shqiperia, with several of his works being pinned in the server as iconic examples of his creative prowess. The term "Vril" itself, borrowed from esoteric and pseudo-scientific concepts, fits Von's affinity for cryptic, sometimes unsettling art that leaves viewers questioning reality. These edits have not only contributed to Von's recognition but also sparked discussions about the role of avant-garde meme culture in online communities.</p>
+</div>
+
+<div class="section" id="ukrainian-glaze">
+    <h2 class="section-title">Ukrainian Glaze <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The term <strong>Ukrainian Glaze</strong> has become synonymous with Von, largely due to his frequent use of it in his memes and edits. The phrase itself is both a humorous and absurd term that refers to an over-the-top, exaggerated portrayal of certain themes, often relating to Ukrainian culture, but also to themes of absurdity and hyperbole in internet humor.<span class="footnote">[4]</span></p>
+    <p>Von’s adoption of the "Ukrainian Glaze" has made it a meme within the server, with members often referencing it in various contexts. The term became even more prominent after Von posted a series of memes using the "glaze" to satirize current events, mixing dark humor with absurd visual edits. This has made Von an even more iconic figure, blending contemporary internet culture with his own absurd vision.</p>
+</div>
+
+<div class="section" id="dantes-lover">
+    <h2 class="section-title">Dante's Lover <a href="#" class="edit-link">[edit]</a></h2>
+    <p>In addition to his other eccentricities, Von is also known for his humorous yet affectionate portrayal of his relationship with <strong>Dante</strong> on the server. The two have often been playfully referred to as a "couple" by server members, with Von affectionately taking the role of "Dante’s lover" in various memes and interactions.<span class="footnote">[5]</span></p>
+    <p>This relationship, though purely comedic in nature, has served to enhance the dynamic between the two, creating inside jokes and a constant source of entertainment for the server’s regulars. Von and Dante’s playful interactions often blur the lines between humor and affection, making their relationship a cornerstone of many server events and memes.</p>
+</div>
+
+<div class="section" id="current-status">
+    <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+    <p>As of March 2025, Von remains a highly active member of the Eternal Shqiperia server, continuing to contribute with his signature Vril edits, memes, and involvement in the eccentric server culture. His relationship with MIDLEG remains strong, with the two still collaborating on various absurd projects and pranks.<span class="footnote">[6]</span></p>
+    <p>Von’s contributions to the server are still widely celebrated, with new members often being introduced to his works upon joining. He continues to be one of the most influential and unpredictable figures in the community, always ready to add his unique touch to any server interaction.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Von’s legacy within the Eternal Shqiperia server is cemented through his unforgettable Vril edits, his quirky relationship with MIDLEG, and the cultural impact of his Ukrainian Glaze memes. His unique approach to humor and creativity has not only shaped the server's identity but has also inspired many others to experiment with strange and surreal forms of online expression.<span class="footnote">[7]</span></p>
+    <p>His influence continues to be felt, with many newer members adopting his style of absurd humor and referencing his works in their own creations. Von’s imprint on the server is a testament to the power of unconventional, boundary-pushing creativity in online communities.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Eternal Shqiperia Server, "Iconic Memes" channel, pinned message featuring Vril edits, February 2025.</li>
+        <li>MIDLEG’s commentary on Von, "The Dynamic Duo", server logs, March 2025.</li>
+        <li>Vril edit archive, Eternal Shqiperia’s "Artistic Contributions" channel, February 2025.</li>
+        <li>Ukrainian Glaze meme compilation, shared in #memes channel, February 2025.</li>
+        <li>Von's memes in "Dante’s Lover" thread, Eternal Shqiperia server, February 2025.</li>
+        <li>Von’s farewell message in "Server Moments", March 2025.</li>
+        <li>Legacy of Vril Edits, Eternal Shqiperia "Community Impact" report, March 2025.</li>
+    </ol>
+</div>
+
+    
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
