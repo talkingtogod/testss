@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Murrlani (Discord Personality)</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Murrlani (aka Murrlani_v2)</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Subfields:</span> Nationalist, Smuggler, Gun Fanatic
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> Insulting the fuck out of anyone, Rapid rise in server ranks
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Status:</span> <span style="color: #f04747;">Head Admin/Co-Owner</span>
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Join Date:</span> First week of Eternal
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Personality:</span> Aggressive, Straightforward, Nationalistic
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#server-history">Server History</a></li>
+        <li><a href="#rise-to-power">Rise to Power</a></li>
+        <li><a href="#leadership-style">Leadership Style</a></li>
+        <li><a href="#personal-life">Personal Life</a></li>
+        <li><a href="#freaky-reputation">Reputation</a></li>
+        <li><a href="#current-status">Current Status</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="introduction">
+    <h2 class="section-title">Introduction <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Murrlani</strong> (also known as <strong>Murrlani_v2</strong>) is a highly controversial and outspoken figure within the <strong>Eternal Shqiperia</strong> server. Known for his aggressive, no-nonsense attitude, Murrlani quickly rose through the ranks of the server, becoming one of the most powerful figures in the community. His unfiltered approach and rapid climb made him both a respected and feared leader within the server.</p>
+    <p>His rise to the position of Head Admin and Co-Owner was unprecedented, as he climbed ranks faster than anyone else, leaving a trail of people who both admired and loathed him. Despite his often abrasive behavior, Murrlani is seen by many as a stabilizing force within the server, with his strong opinions and intense dedication to his ideals.</p>
+</div>
+
+<div class="section" id="server-history">
+    <h2 class="section-title">Server History <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Murrlani first joined the <strong>Eternal Shqiperia</strong> server during its early days, quickly becoming involved in its growth and evolution. He was one of the first to take a leadership role, even before the server had fully formed its structure. His early contributions were mostly focused on administration, and he quickly gained a reputation for his ability to get things done, albeit in a blunt and often controversial manner.</p>
+    <p>As the server continued to expand, Murrlani's influence grew, and within a few months, he became one of the most influential figures in the community. His rapid rise to the position of Head Admin and Co-Owner was a testament to his ability to navigate the chaotic dynamics of the server, often utilizing his sharp tongue and fearless demeanor to get ahead.</p>
+</div>
+
+<div class="section" id="rise-to-power">
+    <h2 class="section-title">Rise to Power <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Murrlani's ascent to power was nothing short of meteoric. His rise through the server ranks was faster than anyone had ever seen, and his ability to outmaneuver others was legendary. Whether through sheer force of will or his uncanny ability to get people to back him, Murrlani quickly earned the respect (and fear) of the community.</p>
+    <p>His climb was marked by a series of sharp insults, no-holds-barred arguments, and unflinching loyalty to his own ideals. Some saw him as a tyrant, while others viewed him as a protector of the server’s integrity. Regardless of how people viewed him, Murrlani’s influence was undeniable, and he played a major role in shaping the direction of the server.</p>
+</div>
+
+<div class="section" id="leadership-style">
+    <h2 class="section-title">Leadership Style <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Murrlani's leadership style is best described as aggressive and unrelenting. He is known for not sugarcoating his opinions, often insulting anyone who disagrees with him or crosses him in any way. His approach to leadership is straightforward: get things done, no matter the cost. This has earned him a loyal following of members who appreciate his directness, but it has also led to conflict with others who find his style abrasive.</p>
+    <p>Despite his harsh methods, Murrlani has been highly effective in managing the server and keeping things running smoothly. He is not afraid to make tough decisions and is quick to deal with problems head-on, often using his sharp wit and even sharper tongue to resolve issues.</p>
+</div>
+
+<div class="section" id="personal-life">
+    <h2 class="section-title">Personal Life <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Not much is known about Murrlani's personal life, as he keeps it largely private. What is known is that he has a deep passion for his ideals, particularly nationalism and gun culture, which he frequently expresses in his discussions. Murrlani is also known to have an affinity for smuggling, although this is often referenced in a humorous or exaggerated context.</p>
+    <p>Outside of the server, Murrlani’s interests are not widely discussed, but he is believed to lead a private life, focusing primarily on his role in <strong>Eternal Shqiperia</strong> and his personal endeavors related to his ideological passions.</p>
+</div>
+
+<div class="section" id="freaky-reputation">
+    <h2 class="section-title">Reputation <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Murrlani is well-known for his sharp tongue and quick temper. His reputation as an "insult machine" is widely recognized within the server, as he doesn't hesitate to tear into anyone who dares to challenge him. Despite his harsh exterior, Murrlani is highly respected by those who value strength and resolve. His unwavering commitment to his beliefs, combined with his ability to climb the ranks quickly, has made him a figure that both inspires loyalty and fear.</p>
+    <p>His reputation as a nationalist, smuggler, and gun fanatic has earned him a particular following among like-minded individuals, while others view him with wariness or outright disdain.</p>
+</div>
+
+<div class="section" id="current-status">
+    <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+    <p>As of March 2025, Murrlani continues to serve as the Head Admin and Co-Owner of the <strong>Eternal Shqiperia</strong> server. His influence remains as strong as ever, and his leadership style continues to shape the direction of the community. While his harsh methods and unyielding personality have made him a divisive figure, there is no denying his importance in the server's current state.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Murrlani’s legacy in the <strong>Eternal Shqiperia</strong> server is a mixed one. On one hand, his rapid rise to power and his no-nonsense leadership have shaped the server into what it is today, with many considering him a key figure in its success. On the other hand, his brutal approach to leadership and penchant for insults have left a lasting impression on the community, with some seeing him as a necessary evil and others viewing him as a tyrant.</p>
+    <p>Regardless of how he is remembered, Murrlani will go down in history as one of the most influential and controversial figures to ever lead the server.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Eternal Shqiperia Server, "Early Leadership" channel, pinned message dated January 2025.</li>
+        <li>TheAlbanians, "Rise and Fall of Discord Tyrants", Discord Chronicles, March 2025.</li>
+        <li>Server logs, February 2025, archived in "Leadership Evolution" channel.</li>
+        <li>Murrlani's Announcement Post, "Server Reformation and Vision", February 2025.</li>
+        <li>Personal conversation, shared in "General Discussion" channel, March 2025.</li>
+    </ol>
+</div>
+
+    
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
