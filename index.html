@@ -3,1086 +3,561 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlbanianServe - Premium Hosting Solutions</title>
+    <title>Wikipedia-like Page</title>
     <style>
-        :root {
-            --primary: #e41e26;
-            --secondary: #000000;
-            --accent: #ffd700;
-            --background: #f5f5f5;
-            --text: #333333;
-        }
-        
-        * {
+        body {
+            font-family: 'Liberation Sans', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
         }
         
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            overflow-x: hidden;
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
         }
         
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--secondary);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out;
-        }
-        
-        .loading-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .eagle-loader {
-            width: 100px;
-            height: 100px;
-            background: url('/api/placeholder/200/200') no-repeat center;
-            background-size: contain;
-            animation: fly 2s infinite ease-in-out;
-        }
-        
-        @keyframes fly {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-        
-        .progress-bar {
-            width: 200px;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.2);
-            margin-top: 20px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: var(--primary);
-            width: 0%;
-            transition: width 0.5s ease-out;
-        }
-        
-        header {
-            background-color: var(--secondary);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        nav {
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-            color: white;
+            font-size: 32px;
             font-weight: bold;
-            font-size: 1.5rem;
-        }
-        
-        .logo-image {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-            background: url('/api/placeholder/100/100') no-repeat center;
-            background-size: contain;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-        }
-        
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--accent);
-            transition: width 0.3s;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .hero {
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--secondary) 0%, #333 100%);
-            color: white;
-        }
-        
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            padding: 2rem;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease-out;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.2s forwards;
-            opacity: 0;
-        }
-        
-        .hero-btns {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            animation: fadeInUp 1s ease-out 0.4s forwards;
-            opacity: 0;
-        }
-        
-        .btn {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            color: #000;
             text-decoration: none;
         }
         
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .search-bar {
+            display: flex;
         }
         
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid white;
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
         }
         
-        .hero-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
         }
         
-        .floating-server {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: url('/api/placeholder/400/400') no-repeat center;
-            background-size: contain;
-            animation: float 8s infinite ease-in-out;
-            z-index: 2;
-            top: 20%;
-            left: 70%;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(5deg); }
-        }
-        
-        .services {
-            padding: 5rem 2rem;
+        /* Main content layout */
+        .content {
+            display: flex;
             max-width: 1200px;
             margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
         }
         
         .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
             text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
         
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--secondary);
-            margin-bottom: 1rem;
-        }
-        
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 4px;
-            background-color: var(--primary);
-            margin: 0 auto;
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .service-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        .service-icon {
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--secondary);
-            padding: 2rem;
-        }
-        
-        .service-icon img {
-            max-width: 100px;
-            height: auto;
-        }
-        
-        .service-content {
-            padding: 2rem;
-        }
-        
-        .service-content h3 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            color: var(--secondary);
-        }
-        
-        .service-content p {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            color: #666;
-        }
-        
-        .features {
-            background-color: var(--secondary);
-            color: white;
-            padding: 5rem 2rem;
-        }
-        
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .features .section-title h2 {
-            color: white;
-        }
-        
-        .features .section-title::after {
-            background-color: var(--accent);
-        }
-        
-        .feature-tabs {
-            display: flex;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .feature-tab {
-            padding: 1rem 2rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
-            position: relative;
-            transition: color 0.3s;
-        }
-        
-        .feature-tab.active {
-            color: white;
-        }
-        
-        .feature-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
+        .infobox-image {
             width: 100%;
-            height: 3px;
-            background-color: var(--primary);
+            margin-bottom: 10px;
         }
         
-        .feature-content {
-            display: none;
-            animation: fadeIn 0.5s ease-out forwards;
+        .infobox-data {
+            margin-bottom: 8px;
         }
         
-        .feature-content.active {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-        }
-        
-        .feature-text {
-            flex: 1;
-        }
-        
-        .feature-image {
-            flex: 1;
-            min-height: 300px;
-            background: url('/api/placeholder/500/300') no-repeat center;
-            background-size: cover;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .feature-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feature-text p {
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-        }
-        
-        .feature-list {
-            list-style: none;
-        }
-        
-        .feature-list li {
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .feature-list li::before {
-            content: '✓';
-            margin-right: 0.8rem;
-            color: var(--accent);
+        .infobox-label {
             font-weight: bold;
-        }
-        
-        .stats {
-            padding: 3rem 2rem;
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .stats-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            text-align: center;
-        }
-        
-        .stat-item h3 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-item p {
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
-        }
-        
-        .pricing {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .pricing-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            position: relative;
-        }
-        
-        .pricing-card.popular {
-            transform: scale(1.05);
-            z-index: 2;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            border: 2px solid var(--primary);
-        }
-        
-        .pricing-card.popular::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: var(--primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            border-bottom-left-radius: 8px;
-        }
-        
-        .pricing-header {
-            background-color: var(--secondary);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        .pricing-name {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .pricing-price {
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
-        
-        .pricing-period {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .pricing-features {
-            padding: 2rem;
-        }
-        
-        .pricing-features ul {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-        
-        .pricing-features li {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .pricing-features li::before {
-            content: '✓';
-            margin-right: 0.8rem;
-            color: var(--primary);
-        }
-        
-        .pricing-footer {
-            padding: 0 2rem 2rem 2rem;
-            text-align: center;
-        }
-        
-        .pricing-btn {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        
-        .pricing-btn:hover {
-            background-color: #c31a20;
-            transform: translateY(-2px);
-        }
-        
-        .testimonials {
-            background-color: #f9f9f9;
-            padding: 5rem 2rem;
-        }
-        
-        .testimonials-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .testimonials-slider {
-            position: relative;
-            overflow: hidden;
-            margin-top: 3rem;
-            height: 350px;
-        }
-        
-        .testimonial-item {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-        }
-        
-        .testimonial-item.active {
-            opacity: 1;
-        }
-        
-        .testimonial-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: url('/api/placeholder/100/100') no-repeat center;
-            background-size: cover;
-            margin-bottom: 1rem;
-            border: 3px solid var(--primary);
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            max-width: 800px;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-size: 1.1rem;
-        }
-        
-        .testimonial-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        .testimonial-company {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .testimonial-controls {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-        
-        .testimonial-control {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .testimonial-control.active {
-            background-color: var(--primary);
-        }
-        
-        .contact {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .contact-submit {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 0.8rem 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .contact-submit:hover {
-            background-color: #c31a20;
         }
         
         footer {
-            background-color: var(--secondary);
-            color: white;
-            padding: 4rem 2rem 2rem;
-        }
-        
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .footer-logo-image {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-            background: url('/api/placeholder/100/100') no-repeat center;
-            background-size: contain;
-        }
-        
-        .footer-logo-text {
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-        
-        .footer-about p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            opacity: 0.8;
-        }
-        
-        .footer-social {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s;
-        }
-        
-        .social-icon:hover {
-            background-color: var(--primary);
-        }
-        
-        .footer-links h4 {
-            margin-bottom: 1.5rem;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .footer-links h4::after {
-            content: '';
-            position: absolute;
-            width: 50%;
-            height: 2px;
-            background-color: var(--primary);
-            bottom: -5px;
-            left: 0;
-        }
-        
-        .footer-links ul {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-        
-        .footer-contact li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .contact-icon {
-            margin-right: 10px;
-            opacity: 0.8;
-        }
-        
-        .copyright {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
             text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.7;
-            font-size: 0.9rem;
+            font-size: 13px;
+            color: #555;
         }
         
-        .to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: translateY(20px);
-            z-index: 99;
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
         }
         
-        .to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
         }
         
-        .popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+        .article a:hover {
+            text-decoration: underline;
         }
         
-        .popup.open {
-            opacity: 1;
-            pointer-events: auto;
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
         }
         
-        .popup-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            transform: translateY(20px);
-            transition: transform 0.3s;
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
         }
         
-        .popup.open .popup-content {
-            transform: translateY(0);
-        }
-        
-        .popup-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .popup-title {
-            margin-bottom: 1rem;
-            color: var(--secondary);
-        }
-        
-        .data-center-map {
-            height: 400px;
-            background: url('/api/placeholder/800/400') no-repeat center;
-            background-size: cover;
-            margin: 3rem 0;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .data-center-point {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            cursor: pointer;
-            transform: translate(-50%, -50%);
-        }
-        
-        .data-center-point::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(228, 30, 38, 0.3);
-            animation: pulse 2s infinite;
-        }
-        
-        .data-center-point:nth-child(1) {
-            top: 40%;
-            left: 20%;
-        }
-        
-        .data-center-point:nth-child(2) {
-            top: 35%;
-            left: 50%;
-        }
-        
-        .data-center-point:nth-child(3) {
-            top: 60%;
-            left: 70%;
-        }
-        
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
-        }
-        
-        .data-center-tooltip {
-            position: absolute;
-            background-color: white;
-            padding: 0.8rem;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            min-width: 150px;
-            z-index: 2;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        
-        .data-center-tooltip.visible {
-            opacity: 1;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
+        /* Responsive design */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
                 width: 100%;
-                background-color: var(--secondary);
-                flex-direction: column;
-                padding: 1rem 0;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
             }
             
-            .nav-links.active {
-                display: flex;
-            }
-            
-            .nav-links li {
-                margin: 0;
+            .infobox, .toc {
+                float: none;
                 width: 100%;
-                text-align: center;
+                margin: 0 0 15px 0;
             }
             
-            .nav-links a {
-                display: block;
-                padding: 1rem;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .hero-btns {
-                flex-direction: column;
-            }
-            
-            .floating-server {
-                display: none;
-            }
-            
-            .feature-content.active {
-                flex-direction: column;
-            }
-            
-            .feature-image {
-                order: -1;
-            }
-            
-            .pricing-card.popular {
-                transform: scale(1);
+            .search-bar input {
+                width: 150px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="loading-screen">
-        <div class="eagle-loader"></div>
-        <div class="progress-bar">
-            <div class="progress"></div>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
         </div>
     </div>
     
-    <header>
-        <nav>
-            <div class="logo">
-                <div class="logo-image"></div>
-                <span>AlbanianServe</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#contact">Contact</a></li>
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
             </ul>
-            <button class="mobile-menu-btn">≡</button>
-        </nav>
-    </header>
-    
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Premium Albanian Server Solutions</h1>
-            <p>Fast, reliable, and secure hosting services. Powered by Albanian excellence and innovation.</p>
-            <div class="hero-btns">
-                <a href="#pricing" class="btn">Get Started</a>
-                <a href="#features" class="btn btn-secondary">Learn More</a>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+            <h1 class="article-title">MIDLEG (Discord Personality)</h1>
+            
+            <div class="infobox">
+                <div class="infobox-title">MIDLEG (aka Loris)</div>
+                <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+                <div class="infobox-data">
+                    <span class="infobox-label">Field:</span> Eternal Shqiperia
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-label">Subfields:</span> Freaky, Trolling, Speed Modding
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-label">Known for:</span> Fastest mod promotion (3 days)
+                    <span class="infobox-label">Known for:</span> Freaky and weird shit
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-label">Status:</span> <span style="color: #f04747;">Admin</span>
+                </div>
+                <div class="infobox-data">
+                    <span class="infobox-label">Former Admin:</span> <a href="#">True</a>
+                </div>
+            </div>
+            
+            <div class="toc">
+                <div class="toc-title">Contents</div>
+                <ol>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#server-history">Server History</a></li>
+                    <li><a href="#mod-career">Moderation Career</a>
+                        <ol>
+                            <li><a href="#rapid-rise">Rapid Rise to Mod</a></li>
+                            <li><a href="#temporary-departure">Temporary Departure</a></li>
+                            <li><a href="#return-and-demotion">Return and Demotion</a></li>
+                        </ol>
+                    </li>
+                    <li><a href="#freaky-reputation">Freaky Reputation</a></li>
+                    <li><a href="#current-status">Current Status</a></li>
+                    <li><a href="#legacy">Legacy</a></li>
+                    <li><a href="#references">References</a></li>
+                </ol>
+            </div>
+            
+            <div class="section" id="introduction">
+                <h2 class="section-title">Introduction <a href="#" class="edit-link">[edit]</a></h2>
+                <p><strong>MIDLEG</strong> (also known as <strong>Loris</strong>) is a notorious Discord personality known for being the most freaky member in the Eternal Shqiperia server.<span class="footnote">[1]</span> His rapid rise to moderator status and subsequent controversies have made him a legendary figure in Discord server lore. Often described as "chaotic good" by server members, MIDLEG has built a reputation for unconventional behavior and trolling that somehow still benefits the community.<span class="footnote">[2]</span></p>
+                <p>MIDLEG's presence on Discord dates back to early 2024, but he rose to prominence in the Eternal Shqiperia server, where his unique communication style and dedication to server activities caught the attention of the administration team.<span class="footnote">[3]</span> His username is allegedly a reference to an inside joke from an early server interaction, though the exact origin remains contested among long-time members.</p>
+            </div>
+            
+            <div class="section" id="server-history">
+                <h2 class="section-title">Server History <a href="#" class="edit-link">[edit]</a></h2>
+                <p>The Eternal Shqiperia server was founded in mid-2024 as a community for Albanian diaspora and enthusiasts, but quickly evolved into a general-purpose server with various channels for gaming, memes, and voice chat activities.<span class="footnote">[4]</span> The server grew rapidly, reaching over 5,000 members by the end of 2022, which necessitated an expansion of the moderation team.</p>
+                <p>MIDLEG joined the server in September 2024 and quickly became one of its most active members, participating in voice chats daily and contributing significantly to text channels. His distinctive humor and dedication to helping newcomers made him stand out among regular members.<span class="footnote">[5]</span> According to server logs, he sent an average of 200 messages per day during his first month, establishing himself as a core community member.</p>
+            </div>
+            
+            <div class="section" id="mod-career">
+                <h2 class="section-title">Moderation Career <a href="#" class="edit-link">[edit]</a></h2>
+                
+                <div id="rapid-rise">
+                    <h3>Rapid Rise to Mod <a href="#" class="edit-link">[edit]</a></h3>
+                    <p>In a unprecedented move that shocked many server veterans, MIDLEG was promoted to moderator status after only <strong>3 days</strong> of membership.<span class="footnote">[6]</span> This remarkable achievement set a server record for the fastest promotion to a staff position. The server owner, <a href="#">Murrlani</a>, cited MIDLEG's "exceptional understanding of community dynamics" and "natural leadership abilities" as justification for the rapid promotion.</p>
+                    <p>As a moderator, MIDLEG introduced several innovative server events, including "Freaky Friday" voice sessions and the popular "Shqiperia's Got Talent" competitions, which significantly boosted member engagement and server activity.<span class="footnote">[7]</span> His moderation style was characterized by creative solutions to conflicts rather than strict rule enforcement, earning him both admiration and occasional criticism from other staff members.</p>
+                </div>
+                
+                <div id="temporary-departure">
+                    <h3>Temporary Departure <a href="#" class="edit-link">[edit]</a></h3>
+                    <p>Despite his initial success, MIDLEG's tenure as moderator took an unexpected turn when he suddenly announced his departure from the server in April 2023.<span class="footnote">[8]</span> The specific reasons for his two-month hiatus remain somewhat mysterious, though server rumors suggest it was related to "real-life commitments" and possibly some internal disagreements with other staff members.</p>
+                    <p>Before leaving, MIDLEG recommended <span class="discord-mention">@Murrlani</span> for an administrative promotion, effectively transferring his responsibilities and influence. During MIDLEG's absence, Murrlani implemented several changes to server structure and moderation policies, some of which deviated from MIDLEG's more lenient approach.<span class="footnote">[9]</span></p>
+                </div>
+                
+                <div id="return-and-demotion">
+                    <h3>Return and Demotion <a href="#" class="edit-link">[edit]</a></h3>
+                    <p>MIDLEG made a dramatic return to the server in June 2023, much to the excitement of regular members. He was initially reinstated as a moderator by Murrlani, who had since become the server's head administrator.<span class="footnote">[10]</span> However, this second tenure as moderator would prove short-lived.</p>
+                    <p>Within weeks of his return, MIDLEG was involved in a controversial incident (commonly referred to as "The Great Emoji Crisis") that ultimately led to his demotion from the moderation team.<span class="footnote">[11]</span> While details remain contested, server logs indicate that MIDLEG replaced all channel emojis with variations of the Albanian flag, causing significant confusion among members. Following this incident, Murrlani removed MIDLEG's moderator status and imposed a one-week mute as disciplinary action.</p>
+                </div>
+            </div>
+            
+            <div class="section" id="freaky-reputation">
+                <h2 class="section-title">Freaky Reputation <a href="#" class="edit-link">[edit]</a></h2>
+                <p>Throughout his time on the server, MIDLEG has consistently been recognized as the "most freaky" member, a title he embraces with pride.<span class="footnote">[12]</span> His "freaky" behavior manifests in various ways, from his unpredictable voice chat antics to his surreal memes and elaborate pranks. Several of his quotes have become server copypastas, including his famous line: "When the eagle flies over Shqiperia, even the clouds bow in respect."</p>
+                <p>MIDLEG's freaky reputation extends beyond mere entertainment value. Several members have credited his unconventional approach with breaking tension during server conflicts and creating a more inclusive atmosphere for newcomers.<span class="footnote">[13]</span> His willingness to engage with members from all backgrounds has helped bridge cultural divides within the diverse server population.</p>
+            </div>
+            
+            <div class="section" id="current-status">
+                <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+                <p>As of the last update to this article, MIDLEG remains muted on the Eternal Shqiperia server, with approximately 3 days remaining in his one-week mute period.<span class="footnote">[14]</span> Despite this restriction, he continues to make his presence known through status updates and by participating in server polls. Server members have started a "#FreeMIDLEG" campaign in the suggestions channel, though Murrlani has not officially responded to these petitions.</p>
+                <p>While no longer part of the moderation team, MIDLEG retains his "Server Legend" role, a custom designation created specifically to acknowledge his contributions to the community. His profile has been viewed over 10,000 times according to Discord stats, making him one of the most recognized members of the Eternal Shqiperia server.<span class="footnote">[15]</span></p>
+            </div>
+            
+            <div class="section" id="legacy">
+                <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+                <p>MIDLEG's impact on the Eternal Shqiperia server has been significant and enduring. Several server features introduced during his moderation period remain in place, including the "Freaky Friday" event and the monthly talent competitions.<span class="footnote">[16]</span> New members are often told stories about MIDLEG's exploits as part of their introduction to server culture.</p>
+                <p>Perhaps most notably, the server's moderation application process was revamped following MIDLEG's unprecedented rise, with a new requirement that candidates must be active members for at least 30 days before consideration.<span class="footnote">[17]</span> This policy change, informally known as the "MIDLEG Rule," acknowledges both the exceptional nature of his rapid promotion and the potential risks of such unusual advancement.</p>
+            </div>
+            
+            <div class="section references" id="references">
+                <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+                <ol>
+                    <li>Eternal Shqiperia Server, "Member Hall of Fame" channel, pinned message dated February 2024.</li>
+                    <li>TheDuckMaster, "The Legends of Discord: Server Characters We'll Never Forget", Discord Documentation Blog, March 2024.</li>
+                    <li>Server welcome logs, January 2024, archived in "Server History" channel.</li>
+                    <li>Murrlani, "The Story of Eternal Shqiperia", server announcement, December 2022.</li>
+                    <li>Monthly Activity Reports, January 2023, archived in staff channels.</li>
+                    <li>Staff promotion announcement, "Important Updates" channel, January 2024.</li>
+                    <li>Server Events Calendar, February-March 2023, archived in #events channel.</li>
+                    <li>MIDLEG's farewell message, April 2023, archived in "Server Moments" channel.</li>
+                    <li>Moderation Policy Update document, May 2023, posted in #rules-and-info.</li>
+                    <li>Welcome back announcement, June 2023, "General" channel.</li>
+                    <li>"The Great Emoji Crisis" incident report, staff logs, June 2024.</li>
+                    <li>Server superlative votes, "#server-awards" channel, quarterly results 2024.</li>
+                    <li>Member testimonials, collected in "#share-your-story" event, September 2024</li>
+                    <li>Moderation action logs, visible to administrators only, February 2024.</li>
+                    <li>Discord Analytics integration, server statistics panel, accessed March 2024.</li>
+                    <li>Current server feature list, "#server-info" channel, updated monthly.</li>
+                    <li>Updated moderation application form, pinned in "#mod-applications" channel, July 2024.</li>
+                </ol>
             </div>
         </div>
-        <div class="hero-particles"></div>
-        <div class="floating-server"></div>
-    </section>
+    </div>
     
-    <section class="services" id="services">
-        <div class="section-title">
-            <h2>Our Services</h2>
-            <p>Comprehensive hosting solutions for all your needs</p>
-        </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">
-                    <img src="/api/placeholder/100/100" alt="Web Hosting">
-                </div>
-                <div class="service-content">
-                    <h3>Web Hosting
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
