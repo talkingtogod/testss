@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Gentius</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Gentius</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Mysterious, Professionalism, Intelligence
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> Intelligence, Professionalism, Elusive nature
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Personality:</span> Mysterious, Professional, Smart
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#early-life-personality">Early Life & Personality</a></li>
+        <li><a href="#professionalism">Professionalism</a></li>
+        <li><a href="#intelligence">Intelligence</a></li>
+        <li><a href="#mysterious-nature">Mysterious Nature</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="early-life-personality">
+    <h2 class="section-title">Early Life & Personality <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Gentius</strong> is a professional and intelligent individual, known for his quiet and mysterious presence in the server. While not overtly vocal or showy, Gentius’s ability to navigate conversations with precision and insight makes him a respected member of the community. His personality is often described as elusive, as he prefers to keep to himself but never fails to make his points clear when he chooses to speak.</p>
+    <p>Those who interact with Gentius find him to be a deep thinker with a strong sense of professionalism. He can be serious when the situation demands but also knows how to handle more relaxed conversations with a calm and collected demeanor. He embodies a balance of mystery and control, keeping others intrigued without ever revealing too much about himself.</p>
+</div>
+
+<div class="section" id="professionalism">
+    <h2 class="section-title">Professionalism <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Gentius</strong> is known for his professional approach to everything he does, whether it’s contributing to server discussions or managing his responsibilities. His presence is marked by a sense of respect for others, maintaining an aura of authority without overstepping boundaries. People often look to him for advice or guidance because of his ability to remain calm under pressure and make well-informed decisions.</p>
+    <p>While Gentius may not always actively seek leadership roles, his professionalism and maturity make him an invaluable asset to any team. He is trusted to handle sensitive matters with tact and discretion, making him one of the more reliable members in the community.</p>
+</div>
+
+<div class="section" id="intelligence">
+    <h2 class="section-title">Intelligence <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Gentius</strong> is often regarded as one of the most intelligent members of the server. He is quick to grasp complex concepts and presents his thoughts in a logical and methodical manner. Whether it’s discussing world affairs, technology, or philosophy, Gentius displays a broad knowledge base that captivates those around him.</p>
+    <p>What sets Gentius apart is not just his knowledge but how he applies it. He has a knack for breaking down complicated topics into digestible information, making him a valuable contributor to deep discussions. Despite his intelligence, he avoids coming across as arrogant, preferring to share his knowledge in a way that encourages others to think critically.</p>
+</div>
+
+<div class="section" id="mysterious-nature">
+    <h2 class="section-title">Mysterious Nature <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Gentius</strong> is often described as a figure of mystery within the community. He is not one to reveal much about himself, and this intrigue has led to many wondering about his true intentions and background. This enigmatic nature only adds to his allure, as people find themselves wanting to know more about the person behind the professional, intelligent exterior.</p>
+    <p>Despite his reserved nature, Gentius’s occasional insights into various topics keep people engaged and wanting more. His ability to remain mysterious while contributing meaningfully to discussions gives him an air of intrigue, making him a unique and respected figure within the server.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Gentius</strong> has established himself as a respected and valuable member of the community, known for his professionalism, intelligence, and mysterious persona. His ability to navigate conversations and situations with calm, precision, and insight has earned him the admiration of many. While he may not seek the spotlight, his contributions leave a lasting impression on those who interact with him.</p>
+    <p>His legacy is built on the respect he commands through his actions rather than words, making him a memorable and influential presence in the community. Even in his quietest moments, Gentius’s intelligence and professionalism speak volumes, and his mystery only adds to his enigmatic charm.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Private discussions, "Gentius: A Professional Enigma," Eternal Shqiperia, March 2025.</li>
+        <li>Server chat records, "Gentius’s Intellectual Contributions," Eternal Shqiperia, February 2025.</li>
+    </ol>
+</div>
+
+    
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
