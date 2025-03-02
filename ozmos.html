@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Ozmos</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Ozmos</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Art, Editing, Creativity
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> Drawing, Editing, Unconventional Personality
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Personality:</span> Creative, Freaky, Artistic
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#early-life-personality">Early Life & Personality</a></li>
+        <li><a href="#creativity-and-art">Creativity & Art</a></li>
+        <li><a href="#editing-skills">Editing Skills</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="early-life-personality">
+    <h2 class="section-title">Early Life & Personality <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Ozmos</strong> is a creative and artistic individual known for his unconventional, sometimes "freaky" nature. He brings a unique energy to the server, often surprising others with his bold and out-of-the-box thinking. While Ozmos may appear quirky to some, his unconventional approach is what makes him stand out. His blend of creativity and eccentricity makes him an interesting and unpredictable personality, engaging with those around him in unexpected ways.</p>
+</div>
+
+<div class="section" id="creativity-and-art">
+    <h2 class="section-title">Creativity & Art <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Ozmos</strong> is particularly known for his drawing skills. His artwork showcases a variety of styles, often blending different influences and techniques. Whether it's digital art or sketches, Ozmos has a natural flair for creating visually captivating pieces that reflect his unique artistic vision.</p>
+    <p>His creativity extends beyond just drawing, as he approaches everything with a creative mindset, often thinking of innovative ways to express himself through his art. His work is not just about aesthetics; it's also a reflection of his personality and his view of the world.</p>
+</div>
+
+<div class="section" id="editing-skills">
+    <h2 class="section-title">Editing Skills <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Ozmos</strong> is also skilled in editing, bringing his creative touch to a wide variety of projects. Whether it’s video editing, photo manipulation, or graphic design, Ozmos has a knack for transforming raw material into something visually engaging and often with an edge. His editing work reflects his artistic sensibilities, making sure that every project is both well-executed and uniquely his own.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Ozmos</strong> has made his mark in the community through his creativity, art, and editing skills. While he may not always be in the spotlight, his contributions—whether through his artwork or his editing projects—are highly regarded by those who have seen his work. His eccentric personality and “freaky” nature also add a layer of intrigue, making him a memorable member of the community.</p>
+    <p>Though still relatively low-key, Ozmos’s contributions to the server and his distinct style ensure that he remains a respected and recognized figure in the creative circles.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Private discussions, "The Creative Touch of Ozmos," Eternal Shqiperia, March 2025.</li>
+        <li>Artwork and editing contributions, "Ozmos's Creative Portfolio," Eternal Shqiperia, March 2025.</li>
+    </ol>
+</div>
+
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
