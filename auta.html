@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Autariatus (Discord Personality)</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Autariatus (aka Arbian)</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Subfields:</span> Leadership, Community Building, Chaos
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> Rapid takeover of server ownership
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Status:</span> <span style="color: #f04747;">Owner</span>
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Children:</span> 120 with Emine
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Personality:</span> Blackpilled, Schizo, Weird
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#server-history">Server History</a></li>
+        <li><a href="#owner-career">Owner Career</a>
+            <ol>
+                <li><a href="#ownership-takeover">Ownership Takeover</a></li>
+                <li><a href="#chaotic-leadership">Chaotic Leadership</a></li>
+            </ol>
+        </li>
+        <li><a href="#personal-life">Personal Life</a></li>
+        <li><a href="#freaky-reputation">Freaky Reputation</a></li>
+        <li><a href="#current-status">Current Status</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="introduction">
+    <h2 class="section-title">Introduction <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Autariatus</strong> (also known as <strong>Arbian</strong>) is the enigmatic and chaotic owner of the <strong>Eternal Shqiperia</strong> server, renowned for his blackpilled and eccentric behavior. Despite his unconventional approach to server management, he quickly became one of the most celebrated yet controversial figures in the Discord community.<span class="footnote">[1]</span> His sudden acquisition of the server's ownership in January 2025 was seen as a highly unexpected turn of events that would shape the server's destiny.</p>
+    <p>Autariatus is best known for his peculiar leadership style, which blends a deep understanding of chaos with a strange, almost mythical aura. He has developed a reputation for his unpredictability and his ability to unite the server through sheer chaos and unconventional methods.<span class="footnote">[2]</span></p>
+</div>
+
+<div class="section" id="server-history">
+    <h2 class="section-title">Server History <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The <strong>Eternal Shqiperia</strong> server was founded in mid-2024 with the goal of creating a space for the Albanian community, but soon morphed into a general-purpose Discord hub for various activities, including gaming, memes, and social interactions.<span class="footnote">[3]</span> After the sudden departure of the previous owner, the server was left in the hands of a new leadership team, culminating in Autariatus taking full ownership in January 2025.</p>
+    <p>Autariatus's leadership was marked by his strange yet captivating personality, which inspired loyalty and fear among server members. Many were skeptical at first about his ability to run the server effectively, but his unique management style quickly proved effective, gaining him respect across the board.<span class="footnote">[4]</span></p>
+</div>
+
+<div class="section" id="owner-career">
+    <h2 class="section-title">Owner Career <a href="#" class="edit-link">[edit]</a></h2>
+
+    <div id="ownership-takeover">
+        <h3>Ownership Takeover <a href="#" class="edit-link">[edit]</a></h3>
+        <p>Autariatus's rise to server ownership was nothing short of legendary. Having been an influential figure in the community for several months, his takeover in January 2025 came as a shock to many. His sudden acquisition was largely attributed to his persuasive and charismatic yet unsettling style, which earned him the loyalty of a large portion of the server population.<span class="footnote">[5]</span> Despite the controversies surrounding his leadership style, he managed to assume control and navigate the server into a new era of unprecedented growth.</p>
+    </div>
+
+    <div id="chaotic-leadership">
+        <h3>Chaotic Leadership <a href="#" class="edit-link">[edit]</a></h3>
+        <p>Autariatus’s leadership is often described as chaotic but effective. His unorthodox strategies, ranging from random server-wide events to blackpilled philosophical discussions, have become the hallmark of his tenure as owner. While some members find his approach unsettling, it is undeniable that his methods have led to an increase in server activity and engagement.<span class="footnote">[6]</span></p>
+    </div>
+</div>
+
+<div class="section" id="personal-life">
+    <h2 class="section-title">Personal Life <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Autariatus is known to have a highly mysterious personal life. Most notably, he has fathered 120 children with a person named Emine, a detail which he frequently references in his bizarre rants. His personal life remains a source of intrigue for many, and his relationship with Emine is often brought up in conversations across the server, though few details are known to the general public.<span class="footnote">[7]</span></p>
+</div>
+
+<div class="section" id="freaky-reputation">
+    <h2 class="section-title">Freaky Reputation <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Autariatus's reputation in the server is one of wild unpredictability. His "blackpilled" nature often manifests through deep, cryptic messages that leave many questioning the meaning of life. Yet, this reputation has endeared him to his followers, who admire his dedication to disrupting the norm and embracing chaos.<span class="footnote">[8]</span></p>
+    <p>Autariatus is frequently associated with the phrase "Embrace the Chaos," a slogan that has become synonymous with his time as server owner. His actions often inspire a mix of fear, admiration, and confusion among the community.<span class="footnote">[9]</span></p>
+</div>
+
+<div class="section" id="current-status">
+    <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+    <p>As of March 2025, Autariatus continues to lead the Eternal Shqiperia server, maintaining his status as the authoritative and eccentric owner. His reign is as chaotic as ever, with occasional server-wide "events" that leave members questioning reality. Despite the odd nature of his leadership, Autariatus remains a highly respected figure in the Discord community.<span class="footnote">[10]</span></p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Autariatus's impact on the Eternal Shqiperia server is indelible. His controversial methods of server management, though unconventional, have shaped the server into what it is today: a thriving and unpredictable community. Many members cite his leadership as a pivotal moment in the server's history, one that will be remembered for years to come.<span class="footnote">[11]</span></p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Eternal Shqiperia Server, "Founder’s Legacy" channel, pinned message dated January 2025.</li>
+        <li>TheAlbanians, "Legends of Discord Servers: The Unlikely Leaders", Discord Chronicles, February 2025.</li>
+        <li>Server logs, January 2025, archived in "Ownership Transition" channel.</li>
+        <li>Autariatus's Announcement Post, "Server Changes and Vision", January 2025.</li>
+        <li>Personal conversation, shared in "General Discussion" channel, February 2025.</li>
+        <li>Server-wide poll, "Who is the best owner?", results published, March 2025.</li>
+    </ol>
+</div>
+
+    
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
