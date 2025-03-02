@@ -1,1 +1,517 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">The Nut Creator (Bardhi)</h1>
+
+<div class="infobox">
+    <div class="infobox-title">The Nut Creator (aka Bardhi)</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> Racist, Patriotic, Debates, Nut Creator title
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Join Date:</span> Early days of Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Personality:</span> Racist, Patriotic, Outspoken
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#first-appearance">First Appearance</a></li>
+        <li><a href="#origin-of-nut-creator">Origin of the Nut Creator Title</a></li>
+        <li><a href="#debates">Debates</a></li>
+        <li><a href="#current-status">Current Status</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="first-appearance">
+    <h2 class="section-title">First Appearance <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>The Nut Creator</strong>, also known as <strong>Bardhi</strong>, first joined the <strong>Eternal Shqiperia</strong> server with the intention to troll. During his first day, he immediately found himself in a heated argument with <strong>Murrlani</strong>, one of the most prominent figures in the community. Despite their initial clash, the two eventually became friends, with Bardhi earning a reputation for his sharp tongue and controversial opinions.</p>
+    <p>In his early days, Bardhi would regularly join voice chats (VCs), engaging in intense debates and discussions on various topics such as religion, history, genetics, and political ideologies. His argumentative nature and willingness to engage in deep and often controversial discussions became a hallmark of his early presence in the server.</p>
+</div>
+
+<div class="section" id="origin-of-nut-creator">
+    <h2 class="section-title">Origin of the Nut Creator Title <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The title "Nut Creator" was born out of Bardhi's infamous trolling behavior. After repeatedly posting offensive and inappropriate content — including a picture of a midget with an exaggeratedly large penis — Bardhi's image permissions were revoked by the server moderators. In response, Bardhi struck a deal with an admin named <strong>Enzo</strong>, who promised to restore his image permissions if Bardhi could provide a link to an exclusive pornstar's OnlyFans account.</p>
+    <p>After scouring Reddit, Bardhi found the requested account and shared it with Enzo, thus securing his image privileges. This deal led to the birth of the "Nut Creator" title, symbolizing his role in pushing boundaries and trolling the moderators while still managing to get his way.</p>
+</div>
+
+<div class="section" id="debates">
+    <h2 class="section-title">Debates <a href="#" class="edit-link">[edit]</a></h2>
+    <p>Bardhi was well-known in the server for engaging in countless debates on a variety of topics, particularly ones involving ethnic and nationalist issues. His most infamous debates were against individuals from different ethnic groups, including <strong>Serbs</strong>, <strong>Arabs</strong>, <strong>Greeks</strong>, and even other Albanians who he considered "brainwashed." These debates often became heated and lasted for hours, with Bardhi passionately defending his views on ethnicity, nationalism, and identity.</p>
+    <p>One of his longest and most intense debates occurred with a <strong>Turkalbanian</strong> (a person of mixed Turkish and Albanian descent) who sported a <strong>Skanderbeg</strong) profile picture. This debate became legendary for its duration and the level of vitriol exchanged, cementing Bardhi’s reputation as a fearless debater.</p>
+    <p>In addition to these cultural and ethnic debates, Bardhi also frequently participated in discussions about the Albanian dialects, particularly the divide between <strong>Gheg</strong> and <strong>Tosk</strong> dialects. He also regularly clashed with communists and anyone who wasn’t ethnically Albanian, often resulting in long and fiery exchanges that fueled his growing notoriety in the community.</p>
+</div>
+
+<div class="section" id="current-status">
+    <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+    <p>As of now, Bardhi remains an active member of the <strong>Eternal Shqiperia</strong> server, though his activity has slowed somewhat. His reputation as a debater and a controversial figure persists, with many members continuing to remember his heated exchanges and his unique title as the "Nut Creator." While no longer as active in every debate, his legacy as a fearless provocateur endures in the server’s history.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The legacy of <strong>The Nut Creator</strong> is one of both admiration and disdain. To some, he is seen as a strong patriot who boldly defended his views, often to the point of absurdity. His debates and bold stance on ethnic and national issues have made him a polarizing figure within the community.</p>
+    <p>Despite the controversies, Bardhi will always be remembered for his audacity, his love of debate, and the creation of the now-infamous "Nut Creator" title. His ability to push boundaries and challenge both moderators and fellow members made him a standout personality in the <strong>Eternal Shqiperia</strong> server, cementing his place in its history.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Server logs, "First Day of Bardhi’s Appearance," Eternal Shqiperia, January 2025.</li>
+        <li>Bardhi's post, "The Nut Creator's Debates," Eternal Shqiperia, February 2025.</li>
+        <li>Discussion record, "Nut Creator Deal," Server chat logs, March 2025.</li>
+        <li>Community discussion, "The Nut Creator’s Legacy," Eternal Shqiperia, March 2025.</li>
+    </ol>
+</div>
+
+    
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
