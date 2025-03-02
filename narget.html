@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        body {
+            font-family: 'Liberation Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+            color: #222;
+            line-height: 1.5;
+        }
+        
+        /* Header styling */
+        .header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        
+        .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #a2a9b1;
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .search-bar button {
+            padding: 8px 16px;
+            background-color: #36c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        /* Main content layout */
+        .content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #a7d7f9;
+        }
+        
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #c8ccd1;
+            padding-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main article styling */
+        .article {
+            flex: 1;
+            padding: 20px 30px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        
+        .article-tab {
+            padding: 8px 16px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .article-tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #a2a9b1;
+            padding: 10px;
+            width: 250px;
+            float: right;
+            margin: 0 0 15px 15px;
+        }
+        
+        .toc-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .toc ol {
+            margin: 0;
+            padding-left: 30px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #0645ad;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 5px;
+        }
+        
+        .footnote {
+            font-size: 13px;
+            color: #0645ad;
+            vertical-align: super;
+        }
+        
+        .references {
+            border-top: 1px solid #a2a9b1;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+        
+        .references h2 {
+            font-size: 22px;
+        }
+        
+        .references ol {
+            font-size: 14px;
+        }
+        
+        .references li {
+            margin-bottom: 8px;
+        }
+        
+        .infobox {
+            float: right;
+            border: 1px solid #a2a9b1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin: 0 0 15px 15px;
+            width: 270px;
+        }
+        
+        .infobox-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .infobox-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .infobox-data {
+            margin-bottom: 8px;
+        }
+        
+        .infobox-label {
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #a7d7f9;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        /* Edit links */
+        .edit-link {
+            font-size: 12px;
+            color: #0645ad;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        /* Make blue links */
+        .article a {
+            color: #0645ad;
+            text-decoration: none;
+        }
+        
+        .article a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Discord style elements */
+        .discord-color {
+            color: #5865F2;
+        }
+        
+        .discord-mention {
+            background-color: rgba(88, 101, 242, 0.15);
+            color: #5865F2;
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #a7d7f9;
+            }
+            
+            .infobox, .toc {
+                float: none;
+                width: 100%;
+                margin: 0 0 15px 0;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-container">
+            <a href="#" class="logo">Wikipedia</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search Wikipedia">
+                <button>Search</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Contents</a></li>
+                <li><a href="#">Featured discord users</a></li>
+                <li><a href="#">Current server drama</a></li>
+                <li><a href="#">Random server</a></li>
+                <li><a href="#">Donate to Midleg</a></li>
+            </ul>
+            
+            <h3>Discord Servers</h3>
+            <ul>
+                <li><a href="#">Shqiperia</a></li>
+                <li><a href="#">Gaming servers</a></li>
+                <li><a href="#">Meme servers</a></li>
+                <li><a href="#">Study groups</a></li>
+                <li><a href="#">Music servers</a></li>
+            </ul>
+            
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="#">Discord mod checker</a></li>
+                <li><a href="#">Server history</a></li>
+                <li><a href="#">Role tracker</a></li>
+                <li><a href="#">Ban appeals</a></li>
+                <li><a href="#">Famous trolls</a></li>
+                <li><a href="#">Cite this page</a></li>
+            </ul>
+        </div>
+        
+        <div class="article">
+            <div class="article-tabs">
+                <div class="article-tab active">Article</div>
+                <div class="article-tab">Talk</div>
+                <div class="article-tab">Edit</div>
+                <div class="article-tab">History</div>
+            </div>
+            
+<h1 class="article-title">Narget Investigation (Discord Incident)</h1>
+
+<div class="infobox">
+    <div class="infobox-title">Narget Investigation</div>
+    <img src="/api/placeholder/250/150" alt="Discord Profile Picture" class="infobox-image">
+    <div class="infobox-data">
+        <span class="infobox-label">Field:</span> Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Subfields:</span> Raiding, Server Security, Investigation
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Known for:</span> The Infamous Raid on Eternal Shqiperia
+    </div>
+    <div class="infobox-data">
+        <span class="infobox-label">Status:</span> Investigated
+    </div>
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#server-raid">The Raid</a></li>
+        <li><a href="#autariatus-collaboration">Autariatus's Collaboration</a></li>
+        <li><a href="#investigation-process">Investigation Process</a></li>
+        <li><a href="#current-status">Current Status</a></li>
+        <li><a href="#legacy">Legacy</a></li>
+        <li><a href="#references">References</a></li>
+    </ol>
+</div>
+
+<div class="section" id="introduction">
+    <h2 class="section-title">Introduction <a href="#" class="edit-link">[edit]</a></h2>
+    <p><strong>Narget</strong> is the infamous figure behind the notorious raid that struck the <strong>Eternal Shqiperia</strong> server in early 2025. Known for sending bizarre and disturbing content, Narget’s raid left many server members shaken and sparked an unprecedented investigation. The aftermath of this event led to a widespread effort to track down Narget, with collaboration from several other Discord servers.</p>
+    <p>The raid was a turning point for the Eternal Shqiperia server, as it revealed serious vulnerabilities in server security and led to the formation of a multi-server coalition aimed at uncovering the identity of the raider.<span class="footnote">[1]</span></p>
+</div>
+
+<div class="section" id="server-raid">
+    <h2 class="section-title">The Raid <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The raid occurred in February 2025, when Narget infiltrated the Eternal Shqiperia server under the guise of a new member. Upon gaining access, he proceeded to flood various channels with disturbing and inappropriate content, including offensive images and cryptic messages, designed to cause chaos.<span class="footnote">[2]</span></p>
+    <p>The raid caused a massive disruption to server activities, triggering an immediate response from the server moderation team. However, the raid's complexity — with Narget using multiple alt accounts and evading moderation quickly — proved difficult to stop. This attack led to the server being temporarily shut down for security reasons as a precaution.</p>
+</div>
+
+<div class="section" id="autariatus-collaboration">
+    <h2 class="section-title">Autariatus's Collaboration <a href="#" class="edit-link">[edit]</a></h2>
+    <p>After the raid, Autariatus, the owner of Eternal Shqiperia, realized that Narget’s actions were part of a much larger, coordinated effort. In response, Autariatus reached out to 10 other Discord server owners to form a collaborative investigative task force. This task force was focused on tracking down Narget’s identity and preventing further raids from the same individual or group.<span class="footnote">[3]</span></p>
+    <p>The collaboration marked a significant moment in server security history, with the participating server owners sharing data and resources to piece together Narget’s actions across multiple platforms. The combined effort helped identify patterns in Narget's behavior, leading to breakthroughs in the investigation.</p>
+</div>
+
+<div class="section" id="investigation-process">
+    <h2 class="section-title">Investigation Process <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The investigation process was extensive and involved multiple steps. Server logs were analyzed, and the raider’s account activity was traced across other servers. It became apparent that Narget had a history of similar behavior in several other communities, which had been largely unnoticed at the time.<span class="footnote">[4]</span></p>
+    <p>The investigation also involved tracking Narget’s digital footprint. Using cross-server collaborations, the team managed to isolate IP addresses, message patterns, and account similarities, which led to a potential identification of Narget. While the full details of Narget’s identity were never fully disclosed to the public, the investigation revealed his possible connection to other, less well-known Discord incidents.</p>
+</div>
+
+<div class="section" id="current-status">
+    <h2 class="section-title">Current Status <a href="#" class="edit-link">[edit]</a></h2>
+    <p>As of March 2025, Narget has remained elusive, despite the collective efforts of the investigation team. Though some of Narget’s activities have been identified, his true identity continues to evade confirmation. However, thanks to the investigation, Eternal Shqiperia and other participating servers have strengthened their security measures to prevent future attacks of this nature.<span class="footnote">[5]</span></p>
+    <p>Currently, Narget is no longer active on the Eternal Shqiperia server, and the raid is considered "resolved" but still a talking point among server members. The investigation has sparked ongoing conversations about the need for better security protocols and anti-raiding measures across Discord communities.</p>
+</div>
+
+<div class="section" id="legacy">
+    <h2 class="section-title">Legacy <a href="#" class="edit-link">[edit]</a></h2>
+    <p>The Narget raid and the subsequent investigation left a lasting impact on the Eternal Shqiperia server. The server implemented a variety of new security features, including stricter vetting processes for new members, enhanced moderation tools, and increased collaboration with other servers to prevent similar incidents.<span class="footnote">[6]</span></p>
+    <p>Moreover, the multi-server collaboration that took place during the investigation has become a model for other communities, demonstrating the power of cooperation in dealing with Discord raids and other malicious activities.</p>
+</div>
+
+<div class="section references" id="references">
+    <h2>References <a href="#" class="edit-link">[edit]</a></h2>
+    <ol>
+        <li>Eternal Shqiperia Server, "Raid Aftermath" channel, pinned message dated February 2025.</li>
+        <li>Autariatus's Announcement Post, "Response to the Narget Raid", February 2025.</li>
+        <li>Collaboration meeting summary, "Cross-Server Investigation Task Force", March 2025.</li>
+        <li>Security incident report, "Narget Raid Timeline", archived in the "Security Logs" channel.</li>
+        <li>Investigation findings, "Digital Footprints of Narget", Discord Security Network, March 2025.</li>
+        <li>Server-wide security update, "New Anti-Raid Measures", March 2025.</li>
+    </ol>
+</div>
+
+    <footer>
+        This page was last edited on 2 March 2025, at 14:32 (UTC).<br>
+        Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.<br>
+        By using this site, you agree to the Terms of Use and Privacy Policy.
+    </footer>
+    
+    <script>
+        // Simple JS to handle tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.article-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // In a real implementation, we would load different content here
+                    // For now, just show an alert
+                    if (this.textContent !== 'Article') {
+                        alert('You clicked on the ' + this.textContent + ' tab. In a real Wikipedia page, this would load different content.');
+                    }
+                });
+            });
+            
+            // Add functionality to search button
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`You searched for: "${searchTerm}". In a real Wikipedia, this would search the database.`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            // Allow pressing Enter in search box
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Make TOC links scroll smoothly
+            const tocLinks = document.querySelectorAll('.toc a');
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add edit link functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionTitle = this.parentElement.textContent.replace('[edit]', '').trim();
+                    alert(`You clicked to edit the "${sectionTitle}" section. In a real Wikipedia, this would open an edit form.`);
+                });
+            });
+            
+            // Make footnote links interactive
+            const footnotes = document.querySelectorAll('.footnote');
+            
+            footnotes.forEach(footnote => {
+                footnote.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const footnoteNum = this.textContent.replace('[', '').replace(']', '');
+                    alert(`This would jump to reference #${footnoteNum} in a real Wikipedia page.`);
+                    
+                    // Scroll to references section
+                    const referencesSection = document.getElementById('references');
+                    if (referencesSection) {
+                        window.scrollTo({
+                            top: referencesSection.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+                
+                // Make footnotes clickable
+                footnote.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
