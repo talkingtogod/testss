@@ -39,118 +39,213 @@
         }
         
         /* Loading Screen */
-        .loader-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--background-color);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s;
-        }
-        
-        .loader-hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .loader {
-            width: 150px;
-            height: 150px;
-            position: relative;
-            margin-bottom: 30px;
-        }
-        
-        .loader-logo {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            fill: var(--primary-color);
-            animation: pulse 1.5s infinite alternate;
-        }
-        
-        .loader-ring {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border: 3px solid transparent;
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        .loader-ring:nth-child(2) {
-            width: 130px;
-            height: 130px;
-            top: 10px;
-            left: 10px;
-            border-top: 3px solid transparent;
-            border-right: 3px solid var(--primary-color);
-            animation: spin 1.5s linear infinite reverse;
-        }
-        
-        .loader-ring:nth-child(3) {
-            width: 110px;
-            height: 110px;
-            top: 20px;
-            left: 20px;
-            border-top: 3px solid transparent;
-            border-left: 3px solid var(--primary-color);
-            animation: spin 2s linear infinite;
-        }
-        
-        .loader-text {
-            font-family: var(--font-title);
-            font-size: 24px;
-            letter-spacing: 2px;
-            color: var(--primary-color);
-            display: flex;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        .loader-text span {
-            display: inline-block;
-            transform: translateY(100%);
-            animation: revealText 2s forwards;
-        }
-        
-        .loader-text span:nth-child(2) { animation-delay: 0.1s; }
-        .loader-text span:nth-child(3) { animation-delay: 0.2s; }
-        .loader-text span:nth-child(4) { animation-delay: 0.3s; }
-        .loader-text span:nth-child(5) { animation-delay: 0.4s; }
-        .loader-text span:nth-child(6) { animation-delay: 0.5s; }
-        .loader-text span:nth-child(7) { animation-delay: 0.6s; }
-        .loader-text span:nth-child(8) { animation-delay: 0.7s; }
-        .loader-text span:nth-child(9) { animation-delay: 0.8s; }
-        .loader-text span:nth-child(10) { animation-delay: 0.9s; }
-        .loader-text span:nth-child(11) { animation-delay: 1.0s; }
-        
-        .loader-progress {
-            width: 200px;
-            height: 4px;
-            background-color: #333;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 2px;
-        }
-        
-        .loader-progress-bar {
-            position: absolute;
-            height: 100%;
-            width: 0%;
-            background-color: var(--primary-color);
-            animation: progress 3s forwards cubic-bezier(0.19, 1, 0.22, 1);
-        }
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease, visibility 0.6s;
+    background-image: linear-gradient(rgba(10, 10, 10, 0.95), rgba(10, 10, 10, 0.95)), 
+                      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="rgba(255,54,54,0.1)" stroke-width="0.5"/></svg>');
+    background-size: cover, 20px 20px;
+}
+
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader {
+    width: 180px;
+    height: 180px;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.loader-logo {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    fill: var(--primary-color);
+    filter: drop-shadow(0 0 5px var(--primary-color));
+    animation: pulse 2s infinite alternate, rotate 15s linear infinite;
+}
+
+.loader-ring {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border: 2px solid rgba(255, 54, 54, 0.1);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 4s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+}
+
+.loader-ring:nth-child(2) {
+    width: 150px;
+    height: 150px;
+    top: 15px;
+    left: 15px;
+    border: 2px solid rgba(255, 54, 54, 0.1);
+    border-right: 2px solid var(--primary-color);
+    animation: spin 3s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite reverse;
+}
+
+.loader-ring:nth-child(3) {
+    width: 120px;
+    height: 120px;
+    top: 30px;
+    left: 30px;
+    border: 2px solid rgba(255, 54, 54, 0.1);
+    border-left: 2px solid var(--primary-color);
+    animation: spin 2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+}
+
+.loader-text {
+    font-family: var(--font-title);
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    text-shadow: 0 0 10px rgba(255, 54, 54, 0.5);
+    margin-bottom: 20px;
+}
+
+.loader-text span {
+    display: inline-block;
+    transform: translateY(100%);
+    animation: revealText 2s forwards;
+    font-weight: 600;
+}
+
+.loader-status {
+    font-family: var(--font-main);
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 12px;
+}
+
+.loader-status:before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    animation: blink 1s infinite;
+}
+
+.loader-progress {
+    width: 300px;
+    height: 2px;
+    background-color: rgba(255, 54, 54, 0.1);
+    margin-top: 15px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1px;
+}
+
+.loader-progress:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 54, 54, 0.5), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.loader-progress-bar {
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    background-color: var(--primary-color);
+    animation: progress 4s forwards cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.loader-info {
+    margin-top: 20px;
+    font-family: var(--font-main);
+    font-size: 12px;
+    color: #666;
+    max-width: 400px;
+    text-align: center;
+    height: 60px;
+    overflow: hidden;
+}
+
+.loader-info-text {
+    display: block;
+    animation: typewriter 5s steps(60, end) infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 1px solid var(--primary-color);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.95); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes revealText {
+    0% { transform: translateY(100%); }
+    30% { transform: translateY(0); }
+    90% { transform: translateY(0); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes progress {
+    0% { width: 0%; }
+    15% { width: 5%; }
+    30% { width: 15%; }
+    50% { width: 40%; }
+    75% { width: 80%; }
+    100% { width: 100%; }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes typewriter {
+    0% { width: 0; }
+    30% { width: 100%; }
+    80% { width: 100%; }
+    90% { width: 0; }
+    100% { width: 0; }
+}
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -666,36 +761,40 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader-container" id="loaderContainer">
-        <div class="loader">
-            <div class="loader-ring"></div>
-            <div class="loader-ring"></div>
-            <div class="loader-ring"></div>
-            <svg class="loader-logo" viewBox="0 0 24 24">
-                <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8 c0-4.41,3.59-8,8-8s8,3.59,8,8C20,16.41,16.41,20,12,20z"/>
-                <path d="M12.31,6.69c-0.39-0.39-1.02-0.39-1.41,0l-3.9,3.9c-0.39,0.39-0.39,1.02,0,1.41l3.9,3.9c0.39,0.39,1.02,0.39,1.41,0 l3.9-3.9c0.39-0.39,0.39-1.02,0-1.41L12.31,6.69z"/>
-            </svg>
-        </div>
-        <div class="loader-text">
-            <span>E</span>
-            <span>T</span>
-            <span>E</span>
-            <span>R</span>
-            <span>N</span>
-            <span>A</span>
-            <span>L</span>
-            <span>S</span>
-            <span>E</span>
-            <span>A</span>
-            <span>R</span>
-            <span>C</span>
-            <span>H</span>
-        </div>
-        <div class="loader-progress">
-            <div class="loader-progress-bar"></div>
-        </div>
+<!-- Loading Screen -->
+<div class="loader-container" id="loaderContainer">
+    <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <svg class="loader-logo" viewBox="0 0 24 24">
+            <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8 c0-4.41,3.59-8,8-8s8,3.59,8,8C20,16.41,16.41,20,12,20z"/>
+            <path d="M12.31,6.69c-0.39-0.39-1.02-0.39-1.41,0l-3.9,3.9c-0.39,0.39-0.39,1.02,0,1.41l3.9,3.9c0.39,0.39,1.02,0.39,1.41,0 l3.9-3.9c0.39-0.39,0.39-1.02,0-1.41L12.31,6.69z"/>
+        </svg>
     </div>
+    <div class="loader-text">
+        <span>E</span>
+        <span>T</span>
+        <span>E</span>
+        <span>R</span>
+        <span>N</span>
+        <span>A</span>
+        <span>L</span>
+        <span>S</span>
+        <span>E</span>
+        <span>A</span>
+        <span>R</span>
+        <span>C</span>
+        <span>H</span>
+    </div>
+    <div class="loader-status">Accessing Eternal Search...</div>
+    <div class="loader-progress">
+        <div class="loader-progress-bar"></div>
+    </div>
+    <div class="loader-info">
+        <span class="loader-info-text">Preparing results...</span>
+    </div>
+</div>
     
     <div class="main-container">
         <header class="header">
